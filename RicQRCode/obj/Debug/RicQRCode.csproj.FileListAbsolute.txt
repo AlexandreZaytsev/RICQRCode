@@ -29,3 +29,6 @@ D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\obj\Debug\RicQRCode.csproj.CopyComplete
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\obj\Debug\RicQRCode.exe
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\obj\Debug\RicQRCode.pdb
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\bin\Debug\CommandLine.dll
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\bin\Debug\CommandLine.xml
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RICQRCode\RicQRCode\obj\Debug\RicQRCode.csprojAssemblyReference.cache
