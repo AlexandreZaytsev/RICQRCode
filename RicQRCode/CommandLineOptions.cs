@@ -42,10 +42,10 @@ namespace RicQRCode
 
         [Option(shortName: 'l', longName: "iconPath", Required = false, HelpText = "Bitmap image from file (full file name with extension).", Default = null)]
         public string ImgFileName { get; set; }
-
+/*
         [Option(longName: "iconSize", Required = false, HelpText = "Sets how much 1-99% of the QR Code will be covered by the icon.", Default = 15)]
         public int ImgSize { get; set; }
-
+*/
         [Usage(ApplicationAlias = "RicQRCoder.exe")]
         public static IEnumerable<Example> Examples
         {

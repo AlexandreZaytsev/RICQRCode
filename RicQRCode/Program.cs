@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 using MessagingToolkit.Barcode;
+using MessagingToolkit.Barcode.QRCode.Decoder;
 //using MessagingToolkit.Barcode.QRCode.Decoder;
 //using MessagingToolkit.Barcode.Pdf417.Encoder;
 //using MessagingToolkit.Barcode.QRCode;
@@ -21,7 +22,16 @@ namespace RicQRCode
 {
     class Program
     {
-
+        
+        private static Dictionary<string, ErrorCorrectionLevel> ErrorCorrectionLevels =
+                        new Dictionary<string, ErrorCorrectionLevel>
+                        {
+                             { "L", ErrorCorrectionLevel.L},
+                             { "M", ErrorCorrectionLevel.M},
+                             { "Q", ErrorCorrectionLevel.Q},
+                             { "H", ErrorCorrectionLevel.H},
+                        };
+        
         static void Main(string[] args)
         {
             var parser = new CommandLine.Parser(with => with.HelpWriter = null);
@@ -52,7 +62,6 @@ namespace RicQRCode
         static int RunOptionsAndReturnExitCode(Options opts)
         {
             var exitCode = 0;
-            Bitmap ImgBitmap = null;
             string appPath = AppDomain.CurrentDomain.BaseDirectory; //string yourpath = Environment.CurrentDirectory (нет закрывающего слеша)
                                                                     //            Console.WriteLine("props= {0}", string.Join(",", props));
 
@@ -96,37 +105,51 @@ namespace RicQRCode
             }
 
             //файл иконки
-            if (opts.ImgFileName != null)
+            Dictionary<EncodeOptions, object> encodingOptions = new Dictionary<EncodeOptions, object>(1);
+            if (!string.IsNullOrEmpty(opts.ImgFileName) && File.Exists(opts.ImgFileName))
             {
-                if (File.Exists(opts.ImgFileName))                                      //если файл существует
-                {
-                    ImgBitmap = (Bitmap)Bitmap.FromFile(opts.ImgFileName);
-                }
-                else
-                {
-                    Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such icon file or directory");
-                }
+                Image logo = Image.FromFile(@opts.ImgFileName);
+                encodingOptions.Add(EncodeOptions.QRCodeLogo, logo);
+            }
+            else
+            {
+                Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such icon file or directory");
             }
 
-            GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.ForegroundColor, opts.BackgroundColor, ImgBitmap, opts.ImgSize);
+            GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
             return exitCode;
         }
 
         //создать QR код
-        private static void GenerateQRCode(string payloadString, string eccLevel, string outputFileName, string imgFormat, int pixelQrSquareSize, string foreground, string background, Bitmap imgObj, int imgSize)
+        private static void GenerateQRCode(string payloadString, string eccLevel, string outputFileName, string imgFormat, int pixelQrSquareSize, string foreground, string background, Dictionary<EncodeOptions, object> encodingOptions)
         {
             using (BarcodeEncoder barcodeEncoder = new BarcodeEncoder())
             {
-                barcodeEncoder.Content = payloadString;
-                barcodeEncoder.CharacterSet = "UTF-8";
-                barcodeEncoder.Width = pixelQrSquareSize;
-                barcodeEncoder.Height = pixelQrSquareSize;
-                barcodeEncoder.Margin = pixelQrSquareSize;
-                barcodeEncoder.ErrorCorrectionLevel = MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel.M;//) eccLevel;// MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel(eccLevel);
+                try
+                {
+                    barcodeEncoder.Content = payloadString;
+                    barcodeEncoder.CharacterSet = "UTF-8";
+                    barcodeEncoder.Width = pixelQrSquareSize;
+                    barcodeEncoder.Height = pixelQrSquareSize;
+                    barcodeEncoder.Margin = pixelQrSquareSize;
+                    barcodeEncoder.ForeColor = ColorTranslator.FromHtml(foreground);
+                    barcodeEncoder.BackColor = ColorTranslator.FromHtml(background);
+                    barcodeEncoder.ErrorCorrectionLevel = ErrorCorrectionLevels[eccLevel];
 
-                Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
-                barcodeEncoder.Dispose();
-                image.Save(outputFileName, new OptionSetter().GetImageFormat(imgFormat));
+                    //Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
+
+                    // If there is no encoding options, use
+                    //Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
+                    Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString, encodingOptions);
+
+                    barcodeEncoder.Dispose();
+                    image.Save(outputFileName, new OptionSetter().GetImageFormat(imgFormat));
+                }
+
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"error, so Sorry");
+                }
             }
         }
 
