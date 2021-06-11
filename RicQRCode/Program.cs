@@ -23,7 +23,7 @@ namespace RicQRCode
     class Program
     {
         
-        private static Dictionary<string, ErrorCorrectionLevel> ErrorCorrectionLevels =
+        private static readonly Dictionary<string, ErrorCorrectionLevel> ErrorCorrectionLevels =
                         new Dictionary<string, ErrorCorrectionLevel>
                         {
                              { "L", ErrorCorrectionLevel.L},
