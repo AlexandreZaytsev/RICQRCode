@@ -41,7 +41,7 @@ namespace RicQRCode
         public string BackgroundColor { get; set; }
 
         [Option(shortName: 'l', longName: "logoPath", Required = false, HelpText = "Bitmap image logo from file (full file name with extension).", Default = null)]
-        public string ImgFileName { get; set; }
+        public string LogoFileName { get; set; }
 /*
         [Option(longName: "iconSize", Required = false, HelpText = "Sets how much 1-99% of the QR Code will be covered by the icon.", Default = 15)]
         public int ImgSize { get; set; }

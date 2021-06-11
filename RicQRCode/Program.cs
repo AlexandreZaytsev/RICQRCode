@@ -106,14 +106,14 @@ namespace RicQRCode
 
             //файл иконки
             Dictionary<EncodeOptions, object> encodingOptions = new Dictionary<EncodeOptions, object>(1);
-            if (!string.IsNullOrEmpty(opts.ImgFileName) && File.Exists(opts.ImgFileName))
+            if (!string.IsNullOrEmpty(opts.LogoFileName) && File.Exists(opts.LogoFileName))
             {
-                Image logo = Image.FromFile(@opts.ImgFileName);
+                Image logo = Image.FromFile(@opts.LogoFileName);
                 encodingOptions.Add(EncodeOptions.QRCodeLogo, logo);
             }
             else
             {
-                Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such image logo file or directory");
+                Console.WriteLine($"{appPath}: {opts.LogoFileName}: No such image logo file or directory");
             }
 
             GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.QrMarginSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
