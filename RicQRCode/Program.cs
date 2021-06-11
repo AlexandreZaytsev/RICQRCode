@@ -11,7 +11,8 @@ using MessagingToolkit.Barcode;
 using System;
 using System.Collections.Generic;
 //using System.Linq;
-//using System.Text;
+using System.Text;
+using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -20,13 +21,7 @@ namespace RicQRCode
 {
     class Program
     {
-        private const BarcodeFormat DefaultBarcodeFormat = BarcodeFormat.QRCode;
-//        private const ErrorCorrectionLevel DefaultBarcodeErrorCorrectionLevel = MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel.M;
-        private const String DefaultImageFormat = "PNG";
-        private const String DefaultOutputFile = "out";
-        private const int DefaultWidth = 300;
-        private const int DefaultHeight = 300;
-        private const int DefaultSize = 1;
+
         static void Main(string[] args)
         {
             var parser = new CommandLine.Parser(with => with.HelpWriter = null);
@@ -44,7 +39,7 @@ namespace RicQRCode
                 h.AdditionalNewLineAfterOption = false; //remove the extra newline between options
                 h.AddEnumValuesToHelpText = true;
                 h.MaximumDisplayWidth = 200;
-                h.Heading = "RicQRCoder 1.0.0"; //change header
+                h.Heading = "RicQRCode 1.0.0 (uses two libraries (in the program directory): MessagingToolkit.Barcode.dll, CommandLine.dll)"; //change header
                 h.Copyright = "Copyright (c) 2021 cad.ru"; //change copyrigt text
                 h.AddPreOptionsLine("");// ("<<license as is>>");
                 h.AddPostOptionsText("Good luck...");
@@ -56,8 +51,8 @@ namespace RicQRCode
         //In sucess: the main logic to handle the options
         static int RunOptionsAndReturnExitCode(Options opts)
         {
-            Bitmap ImgBitmap = null;
             var exitCode = 0;
+            Bitmap ImgBitmap = null;
             string appPath = AppDomain.CurrentDomain.BaseDirectory; //string yourpath = Environment.CurrentDirectory (нет закрывающего слеша)
                                                                     //            Console.WriteLine("props= {0}", string.Join(",", props));
 
@@ -79,7 +74,7 @@ namespace RicQRCode
             }
 
             //файл QR
-            //если имя не пустое и каталог и имя не содержат недопустимыз символов)
+            //если имя не пустое и каталог и имя не содержат недопустимых символов)
             if (opts.OutputFileName != null)// && ((opts.OutputFileName.IndexOfAny(Path.GetInvalidPathChars()) == -1) && (opts.OutputFileName.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)))
             {
                 //удалить расширение если есть и добавить из параметров
@@ -100,134 +95,43 @@ namespace RicQRCode
                 opts.OutputFileName = appPath + "QRImageFile." + opts.ImageFormat.ToString().ToLower();
             }
 
+            //файл иконки
+            if (opts.ImgFileName != null)
+            {
+                if (File.Exists(opts.ImgFileName))                                      //если файл существует
+                {
+                    ImgBitmap = (Bitmap)Bitmap.FromFile(opts.ImgFileName);
+                }
+                else
+                {
+                    Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such icon file or directory");
+                }
+            }
 
-
+            GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.ForegroundColor, opts.BackgroundColor, ImgBitmap, opts.ImgSize);
             return exitCode;
         }
-            /*
-                    {
-                        if (args.Length == 0)
-                        {
-                            PrintUsage();
-                            return;
-                        }
 
-                        BarcodeFormat barcodeFormat = DefaultBarcodeFormat;
-                        String imageFormat = DefaultImageFormat;
-                        String outFileString = DefaultOutputFile;
-                        int width = DefaultWidth;
-                        int height = DefaultHeight;
-                        int size = DefaultSize;
-
-                        foreach (String arg in args)
-                        {
-                            if (arg.StartsWith("--barcode_format", StringComparison.OrdinalIgnoreCase))
-                            {
-                                barcodeFormat = (BarcodeFormat)Enum.Parse(typeof(BarcodeFormat), arg.Split('=')[1].Trim());
-                            }
-                            else if (arg.StartsWith("--image_format", StringComparison.OrdinalIgnoreCase))
-                            {
-                                imageFormat = arg.Split('=')[1];
-                            }
-                            else if (arg.StartsWith("--output", StringComparison.OrdinalIgnoreCase))
-                            {
-                                outFileString = arg.Split('=')[1];
-                            }
-                            else if (arg.StartsWith("--width", StringComparison.OrdinalIgnoreCase))
-                            {
-                                width = Convert.ToInt32(arg.Split('=')[1]);
-                            }
-                            else if (arg.StartsWith("--height", StringComparison.OrdinalIgnoreCase))
-                            {
-                                height = Convert.ToInt32(arg.Split('=')[1]);
-                            }
-                            else if (arg.StartsWith("--size", StringComparison.OrdinalIgnoreCase))
-                            {
-                                size = Convert.ToInt32(arg.Split('=')[1]);
-                            }
-                        }
-
-                        //            if (DefaultOutputFile.Equals(outFileString, StringComparison.OrdinalIgnoreCase))
-                        //            {
-                        //                outFileString += '.' + imageFormat.ToLower();
-                        //            }
-
-                        String contents = null;
-                        foreach (String arg in args)
-                        {
-                            if (!arg.StartsWith("--"))
-                            {
-                                contents = arg;
-                                break;
-                            }
-                        }
-
-                        if (contents == null)
-                        {
-                            PrintUsage();
-                            return;
-                        }
-
-                        using (BarcodeEncoder barcodeEncoder = new BarcodeEncoder())
-                        {
-                            barcodeEncoder.Content = contents;
-                            barcodeEncoder.CharacterSet = "UTF-8";
-                            barcodeEncoder.Width = width;
-                            barcodeEncoder.Height = height;
-                            barcodeEncoder.Margin = size;
-                            barcodeEncoder.ErrorCorrectionLevel = MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel.H;//.M;
-
-
-                            Image image = barcodeEncoder.Encode(barcodeFormat, contents);
-                            barcodeEncoder.Dispose();
-
-                            ImageFormat saveImageFormat = ImageFormat.Png;
-                            switch (imageFormat.ToLower())
-                            {
-                                case "png":
-                                    saveImageFormat = ImageFormat.Png;
-                                    break;
-                                case "jpeg":
-                                case "jpg":
-                                    saveImageFormat = ImageFormat.Jpeg;
-                                    break;
-                                case "bmp":
-                                    saveImageFormat = ImageFormat.Bmp;
-                                    break;
-                                case "emf":
-                                    saveImageFormat = ImageFormat.Emf;
-                                    break;
-                                case "gif":
-                                    saveImageFormat = ImageFormat.Gif;
-                                    break;
-                                case "icon":
-                                    saveImageFormat = ImageFormat.Icon;
-                                    break;
-                                case "wmf":
-                                    saveImageFormat = ImageFormat.Wmf;
-                                    break;
-                                case "tiff":
-                                    saveImageFormat = ImageFormat.Tiff;
-                                    break;
-                            }
-                            image.Save(outFileString + "." + imageFormat.ToLower(), saveImageFormat);
-                        }
-                    }
-            */
-            private static void PrintUsage()
+        //создать QR код
+        private static void GenerateQRCode(string payloadString, string eccLevel, string outputFileName, string imgFormat, int pixelQrSquareSize, string foreground, string background, Bitmap imgObj, int imgSize)
         {
-            Console.WriteLine("Encodes barcode images using the library\n");
-            Console.WriteLine("usage: CommandLineEncoder [ options ] content_to_encode");
-            //            Console.WriteLine("  --barcode_format=format: Format to encode, from BarcodeFormat class. " +
-            //                                   "Not all formats are supported. Defaults to QR_CODE.");
-            Console.WriteLine("  --image_format=format: image output format, such as PNG, JPG, GIF. Defaults to PNG");
-            Console.WriteLine("  --output=filename: File to write to. Defaults to out.png");
-            Console.WriteLine("  --width=pixels: Image width. Defaults to 300");
-            Console.WriteLine("  --height=pixels: Image height. Defaults to 300");
-            Console.WriteLine("  --size=integer: Size barcode inside the image (0-10). Defaults to 1");
+            using (BarcodeEncoder barcodeEncoder = new BarcodeEncoder())
+            {
+                barcodeEncoder.Content = payloadString;
+                barcodeEncoder.CharacterSet = "UTF-8";
+                barcodeEncoder.Width = pixelQrSquareSize;
+                barcodeEncoder.Height = pixelQrSquareSize;
+                barcodeEncoder.Margin = pixelQrSquareSize;
+                barcodeEncoder.ErrorCorrectionLevel = MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel.M;//) eccLevel;// MessagingToolkit.Barcode.QRCode.Decoder.ErrorCorrectionLevel(eccLevel);
+
+                Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
+                barcodeEncoder.Dispose();
+                image.Save(outputFileName, new OptionSetter().GetImageFormat(imgFormat));
+            }
         }
 
-        private static string GetTextFromFile(FileInfo fileInfo)
+            //прочитать контент из файла
+            private static string GetTextFromFile(FileInfo fileInfo)
         {
             var buffer = new byte[fileInfo.Length];
 
@@ -254,25 +158,18 @@ namespace RicQRCode
                 case "jpeg":
                 case "jpg":
                     return ImageFormat.Jpeg;
-                    break;
                 case "bmp":
                     return ImageFormat.Bmp;
-                    break;
                 case "emf":
                     return ImageFormat.Emf;
-                    break;
                 case "gif":
                     return ImageFormat.Gif;
-                    break;
                 case "icon":
                     return ImageFormat.Icon;
-                    break;
                 case "wmf":
                     return ImageFormat.Wmf;
-                    break;
                 case "tiff":
                     return ImageFormat.Tiff;
-                    break;
                 case "png":
                 default:
                     return ImageFormat.Png;

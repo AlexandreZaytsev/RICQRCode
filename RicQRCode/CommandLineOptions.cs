@@ -1,7 +1,5 @@
 ﻿using CommandLine;
 using CommandLine.Text;
-//using QRCoder;
-using MessagingToolkit.Barcode;
 using System.Collections.Generic;
 
 namespace RicQRCode
@@ -20,14 +18,21 @@ namespace RicQRCode
         [Option(shortName: 'o', longName: "outFile", Required = true, HelpText = "Output file. Full file name without extension (extension from outFormat parameter).", Default = null)]
         public string OutputFileName { get; set; }
 
-        [Option(longName: "outFormat", Required = false, HelpText = "Image format for outputfile.", Default = SupportedImageFormat.Png)]
-        public SupportedImageFormat ImageFormat { get; set; }
-/*
-        [Option(longName: "eccLevel", Required = false, HelpText = "Error correction level: L-7%, M-15%, Q-25%, H-30%.", Default = QRCodeGenerator.ECCLevel.M)]
-        public QRCodeGenerator.ECCLevel EccLevel { get; set; }
+        [Option(longName: "outFormat", Required = false, HelpText = "Image format for outputfile.", Default = "png")]
+        public string ImageFormat { get; set; }
 
-        [Option(longName: "pixelSize", Required = false, HelpText = "The pixel size each b/w module is drawn (from 1 and more).", Default = 20)]
-        public int PixelsPerModule { get; set; }
+        [Option(longName: "eccLevel", Required = false, HelpText = "Error correction level: L-7%, M-15%, Q-25%, H-30%.", Default = "L")]
+        public string EccLevel { get; set; }
+        /*
+                [Option(longName: "pixelSize", Required = false, HelpText = "The pixel size each b/w module is drawn (from 1 and more).", Default = 20)]
+                public int PixelsPerModule { get; set; }
+        */
+
+        [Option(longName: "size", Required = false, HelpText = "Size (px.) of the side of the square of the picture of the QR image.", Default = 300)]
+        public int QrSquareSize { get; set; }
+
+        [Option(longName: "margin", Required = false, HelpText = "Size (px.) of the frame around the qr code image (Margin).", Default = 1)]
+        public int QrMarginSize { get; set; }
 
         [Option(longName: "background", Required = false, HelpText = "Background color.", Default = "#000000")]
         public string ForegroundColor { get; set; }
@@ -47,10 +52,9 @@ namespace RicQRCode
             get
             {
                 return new List<Example>() {
-                    new Example("Creates a QR image file from your content (string or file)", new Options { Content="your content", OutputFileName = "your FileName QRImageFile" })
+                    new Example("Creates a QR image file (fix imagelSize) from your content (string or file)", new Options { Content="your content", OutputFileName = "your FileName QRImageFile" })
                 };
             }
         }
-        */
     }
 }
