@@ -113,7 +113,7 @@ namespace RicQRCode
             }
             else
             {
-                Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such icon file or directory");
+                Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such image logo file or directory");
             }
 
             GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.QrMarginSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
