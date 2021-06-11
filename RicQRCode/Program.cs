@@ -116,12 +116,12 @@ namespace RicQRCode
                 Console.WriteLine($"{appPath}: {opts.ImgFileName}: No such icon file or directory");
             }
 
-            GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
+            GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.QrMarginSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
             return exitCode;
         }
 
         //создать QR код
-        private static void GenerateQRCode(string payloadString, string eccLevel, string outputFileName, string imgFormat, int pixelQrSquareSize, string foreground, string background, Dictionary<EncodeOptions, object> encodingOptions)
+        private static void GenerateQRCode(string payloadString, string eccLevel, string outputFileName, string imgFormat, int pixelQrSquareSize, int MarginSize, string foreground, string background, Dictionary<EncodeOptions, object> encodingOptions)
         {
             using (BarcodeEncoder barcodeEncoder = new BarcodeEncoder())
             {
@@ -131,7 +131,7 @@ namespace RicQRCode
                     barcodeEncoder.CharacterSet = "UTF-8";
                     barcodeEncoder.Width = pixelQrSquareSize;
                     barcodeEncoder.Height = pixelQrSquareSize;
-                    barcodeEncoder.Margin = pixelQrSquareSize;
+                    barcodeEncoder.Margin = MarginSize;
                     barcodeEncoder.ForeColor = ColorTranslator.FromHtml(foreground);
                     barcodeEncoder.BackColor = ColorTranslator.FromHtml(background);
                     barcodeEncoder.ErrorCorrectionLevel = ErrorCorrectionLevels[eccLevel];
