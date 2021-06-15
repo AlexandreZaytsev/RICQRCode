@@ -20,18 +20,8 @@ using System.Drawing.Imaging;
 
 namespace RicQRCode
 {
-    class Program
+    class MainClass
     {
-        
-        private static readonly Dictionary<string, ErrorCorrectionLevel> ErrorCorrectionLevels =
-                        new Dictionary<string, ErrorCorrectionLevel>
-                        {
-                             { "L", ErrorCorrectionLevel.L},
-                             { "M", ErrorCorrectionLevel.M},
-                             { "Q", ErrorCorrectionLevel.Q},
-                             { "H", ErrorCorrectionLevel.H},
-                        };
-        
         static void Main(string[] args)
         {
             var parser = new CommandLine.Parser(with => with.HelpWriter = null);
@@ -106,14 +96,17 @@ namespace RicQRCode
 
             //файл иконки
             Dictionary<EncodeOptions, object> encodingOptions = new Dictionary<EncodeOptions, object>(1);
-            if (!string.IsNullOrEmpty(opts.LogoFileName) && File.Exists(opts.LogoFileName))
+            if (opts.LogoFileName != null)
             {
-                Image logo = Image.FromFile(@opts.LogoFileName);
-                encodingOptions.Add(EncodeOptions.QRCodeLogo, logo);
-            }
-            else
-            {
-                Console.WriteLine($"{appPath}: {opts.LogoFileName}: No such image logo file or directory");
+                if (!string.IsNullOrEmpty(opts.LogoFileName) && File.Exists(opts.LogoFileName))
+                {
+                    Image logo = Image.FromFile(@opts.LogoFileName);
+                    encodingOptions.Add(EncodeOptions.QRCodeLogo, logo);
+                }
+                else
+                {
+                    Console.WriteLine($"{appPath}: {opts.LogoFileName}: No such image logo file or directory");
+                }
             }
 
             GenerateQRCode(opts.Content, opts.EccLevel, opts.OutputFileName, opts.ImageFormat, opts.QrSquareSize, opts.QrMarginSize, opts.ForegroundColor, opts.BackgroundColor, encodingOptions);
@@ -134,7 +127,7 @@ namespace RicQRCode
                     barcodeEncoder.Margin = MarginSize;
                     barcodeEncoder.ForeColor = ColorTranslator.FromHtml(foreground);
                     barcodeEncoder.BackColor = ColorTranslator.FromHtml(background);
-                    barcodeEncoder.ErrorCorrectionLevel = ErrorCorrectionLevels[eccLevel];
+                    barcodeEncoder.ErrorCorrectionLevel = OptionSetter.ECCLevels[eccLevel];
 
                     //Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
 
@@ -142,8 +135,8 @@ namespace RicQRCode
                     //Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString);
                     Image image = barcodeEncoder.Encode(BarcodeFormat.QRCode, payloadString, encodingOptions);
 
-                    barcodeEncoder.Dispose();
-                    image.Save(outputFileName, new OptionSetter().GetImageFormat(imgFormat));
+                    //barcodeEncoder.Dispose();
+                    image.Save(outputFileName, OptionSetter.GetImageFormat(imgFormat));
                 }
 
                 catch (Exception ex)
@@ -168,13 +161,22 @@ namespace RicQRCode
     }
     public class OptionSetter
     {
- //       public QRCodeGenerator.ECCLevel GetECCLevel(string value)
- //       {
- //           Enum.TryParse(value, out QRCodeGenerator.ECCLevel level);
- //           return level;
- //       }
+        //       public QRCodeGenerator.ECCLevel GetECCLevel(string value)
+        //       {
+        //           Enum.TryParse(value, out QRCodeGenerator.ECCLevel level);
+        //           return level;
+        //       }
 
-        public ImageFormat GetImageFormat(string value)
+        public static readonly Dictionary<string, ErrorCorrectionLevel> ECCLevels =
+            new Dictionary<string, ErrorCorrectionLevel>
+                {
+                    { "L", ErrorCorrectionLevel.L},
+                    { "M", ErrorCorrectionLevel.M},
+                    { "Q", ErrorCorrectionLevel.Q},
+                    { "H", ErrorCorrectionLevel.H},
+                };
+
+        public static ImageFormat GetImageFormat(string value)
         {
             switch (value.ToLower())
             {

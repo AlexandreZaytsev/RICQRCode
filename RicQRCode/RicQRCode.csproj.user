@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>-i "Оплата по Счету№12345-67" -o"C:\Users\zaytsev\AppData\Roaming\LotsiaSoft\PartY\Tmp\Order12345-67" --size 250 --outFormat "gif" --margin=0 --eccLevel "Q" -l "C:\Users\zaytsev\AppData\Roaming\LotsiaSoft\PartY\Icons\logo\ric.p_ng" --background "001000"</StartArguments>
+    <StartArguments>-i "dfgsdfgsdfgsdf" -o "C:\Users\zaytsev\AppData\Roaming\LotsiaSoft\PartY\Tmp\bq"</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
