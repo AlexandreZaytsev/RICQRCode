@@ -11,3 +11,16 @@ D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RicQRCode\RicQRCode\obj\Release\RicQRCode.csproj.CopyComplete
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RicQRCode\RicQRCode\obj\Release\RicQRCode.exe
 D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\github\RicQRCode\RicQRCode\obj\Release\RicQRCode.pdb
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\RicQRCode.exe.config
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\RicQRCode.exe
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\RicQRCode.pdb
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\CommandLine.dll
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\MessagingToolkit.Barcode.dll
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\bin\Release\CommandLine.xml
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.csproj.AssemblyReference.cache
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.Properties.Resources.resources
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.csproj.GenerateResource.cache
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.csproj.CoreCompileInputs.cache
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.csproj.CopyComplete
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.exe
+D:\RicWork\Project VisualStudio Express\Project MS Visual Studio\Source Project\RicQRCode\RicQRCode\obj\Release\RicQRCode.pdb
